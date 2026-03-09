@@ -33,3 +33,20 @@ export class ActionNode extends Node {
         return this.action(blackboard);
     }
 }
+
+/**
+ * ConditionNode: A simple wrapper for blackboard-based boolean checks.
+ * Returns SUCCESS if the predicate is true, FAILURE otherwise.
+ */
+export class ConditionNode extends Node {
+    private predicate: (bb: Blackboard) => boolean;
+
+    constructor(predicate: (bb: Blackboard) => boolean) {
+        super();
+        this.predicate = predicate;
+    }
+
+    tick(bb: Blackboard): NodeStatus {
+        return this.predicate(bb) ? NodeStatus.Success : NodeStatus.Failure;
+    }
+}
