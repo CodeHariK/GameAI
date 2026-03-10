@@ -1,7 +1,7 @@
 import { createSignal, onCleanup, For } from "solid-js";
-import { NodeStatus, ActionNode } from "../../bt/types";
+import { BTNodeStatus, BTActionNode } from "../../bt/types";
 import { Sequence, MemSequence } from "../../bt/composites";
-import { Blackboard } from "../../bt/blackboard";
+import { Blackboard } from "../../common/blackboard";
 import { WaitNode } from "../../bt/decorators";
 
 export default function StatelessVsStateful() {
@@ -26,23 +26,23 @@ function AgentBox(props: { title: string, useMemory: boolean }) {
         currentLogNum += 1;
     };
 
-    const search = new ActionNode(() => {
+    const search = new BTActionNode(() => {
         addLog("Searching...");
         setStatus("Searching");
-        return NodeStatus.Success;
+        return BTNodeStatus.Success;
     });
 
-    const walk = new ActionNode(() => {
+    const walk = new BTActionNode(() => {
         setStatus("Walking...");
-        return NodeStatus.Success;
+        return BTNodeStatus.Success;
     });
 
     const reachTarget = new WaitNode(2000);
 
-    const pickUp = new ActionNode(() => {
+    const pickUp = new BTActionNode(() => {
         addLog("Picked up item!");
         setStatus("Success!");
-        return NodeStatus.Success;
+        return BTNodeStatus.Success;
     });
 
     const Composite = props.useMemory ? MemSequence : Sequence;

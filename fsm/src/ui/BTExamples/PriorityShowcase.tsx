@@ -1,7 +1,7 @@
 import { createSignal, onCleanup, For } from "solid-js";
-import { NodeStatus, ActionNode, ConditionNode } from "../../bt/types";
+import { BTNodeStatus, BTActionNode, BTConditionNode } from "../../bt/types";
 import { Sequence, Selector, MemSequence } from "../../bt/composites";
-import { Blackboard } from "../../bt/blackboard";
+import { Blackboard } from "../../common/blackboard";
 import { WaitNode } from "../../bt/decorators";
 
 export default function PriorityShowcase() {
@@ -19,36 +19,53 @@ export default function PriorityShowcase() {
 
     // 1. Critical Responses (Zero Memory - Must react EVERY pulse)
     const panic = new Sequence([
-        new ConditionNode((bb) => (bb.get<number>("health") || 0) < 20),
-        new ActionNode(() => {
+        new BTConditionNode((bb) => (bb.get<number>("health") || 0) < 20),
+        new BTActionNode(() => {
             setStatus("PANIC! Run away!");
             addLog("CRITICAL: Low health panic!");
-            return NodeStatus.Success;
+            return BTNodeStatus.Success;
         })
     ]);
 
     const stunResponse = new Sequence([
-        new ConditionNode((bb) => !!bb.get<boolean>("stunned")),
-        new ActionNode(() => {
+        new BTConditionNode((bb) => !!bb.get<boolean>("stunned")),
+        new BTActionNode(() => {
             setStatus("Stunned...");
             addLog("CRITICAL: Stunned!");
-            return NodeStatus.Success;
+            return BTNodeStatus.Success;
         })
     ]);
 
     // 2. Proactive Behaviors (Investigations)
     const investigate = new MemSequence([
-        new ConditionNode((bb) => !!bb.get<boolean>("heardNoise")),
-        new ActionNode(() => { addLog("Investigating noise..."); setStatus("Investigating..."); return NodeStatus.Success; }),
+        new BTConditionNode((bb) => !!bb.get<boolean>("heardNoise")),
+        new BTActionNode(() => {
+            addLog("Investigating noise...");
+            setStatus("Investigating...");
+            return BTNodeStatus.Success;
+        }),
         new WaitNode(2000),
-        new ActionNode((bb) => { addLog("Noise was nothing."); bb.set("heardNoise", false); setNoiseSource(false); return NodeStatus.Success; })
+        new BTActionNode((bb) => {
+            addLog("Noise was nothing.");
+            bb.set("heardNoise", false);
+            setNoiseSource(false);
+            return BTNodeStatus.Success;
+        })
     ]);
 
     // 3. Idle Behaviors
     const idleFlow = new MemSequence([
-        new ActionNode(() => { setStatus("Patrolling Area A"); addLog("Idle: Patrol A"); return NodeStatus.Success; }),
+        new BTActionNode(() => {
+            setStatus("Patrolling Area A");
+            addLog("Idle: Patrol A");
+            return BTNodeStatus.Success;
+        }),
         new WaitNode(1500),
-        new ActionNode(() => { setStatus("Patrolling Area B"); addLog("Idle: Patrol B"); return NodeStatus.Success; }),
+        new BTActionNode(() => {
+            setStatus("Patrolling Area B");
+            addLog("Idle: Patrol B");
+            return BTNodeStatus.Success;
+        }),
         new WaitNode(1500)
     ]);
 

@@ -1,14 +1,14 @@
 import { createSignal, onCleanup, For } from "solid-js";
-import { NodeStatus, ActionNode } from "../bt/types";
+import { BTNodeStatus, BTActionNode } from "../bt/types";
 import { Sequence, Selector, MemSequence } from "../bt/composites";
-import { Blackboard } from "../bt/blackboard";
+import { Blackboard } from "../common/blackboard";
 import { WaitNode, Inverter } from "../bt/decorators";
 
-export default function BTVisualizer() {
+export default function TheGuard() {
     const [health, setHealth] = createSignal(100);
     const [isStunned, setIsStunned] = createSignal(false);
     const [statusMessage, setStatusMessage] = createSignal("Idle");
-    const [lastResult, setLastResult] = createSignal<NodeStatus>(NodeStatus.Running);
+    const [lastResult, setLastResult] = createSignal<BTNodeStatus>(BTNodeStatus.Running);
     const [logs, setLogs] = createSignal<string[]>([]);
     let currentLogNum = 0;
     let logBuffer: string[] = [];
@@ -20,39 +20,39 @@ export default function BTVisualizer() {
     };
 
     // 1. Actions
-    const flee = new ActionNode(() => {
+    const flee = new BTActionNode(() => {
         setStatusMessage("Fleeing for safety!");
         addLog("Action: Fleeing");
-        return NodeStatus.Success;
+        return BTNodeStatus.Success;
     });
 
-    const checkHealth = new ActionNode(() => {
+    const checkHealth = new BTActionNode(() => {
         if (health() < 30) {
             addLog("Check: Health Low!");
-            return NodeStatus.Success;
+            return BTNodeStatus.Success;
         }
-        return NodeStatus.Failure;
+        return BTNodeStatus.Failure;
     });
 
-    const patrol_1 = new ActionNode(() => {
+    const patrol_1 = new BTActionNode(() => {
         setStatusMessage("Patrolling: Point A");
         addLog("Action: Point A");
-        return NodeStatus.Success;
+        return BTNodeStatus.Success;
     });
 
-    const patrol_2 = new ActionNode(() => {
+    const patrol_2 = new BTActionNode(() => {
         setStatusMessage("Patrolling: Point B");
         addLog("Action: Point B");
-        return NodeStatus.Success;
+        return BTNodeStatus.Success;
     });
 
-    const checkStunned = new ActionNode((bb) => {
+    const checkStunned = new BTActionNode((bb) => {
         if (bb.get("stunned")) {
             addLog("Check: Stunned!");
             setStatusMessage("Dizzy... (@_@)");
-            return NodeStatus.Success;
+            return BTNodeStatus.Success;
         }
-        return NodeStatus.Failure;
+        return BTNodeStatus.Failure;
     });
 
     // 2. The Tree
@@ -157,8 +157,8 @@ export default function BTVisualizer() {
                     <h3>BT Pulse (500ms Tick)</h3>
                     <p>Root Result:
                         <code style={{
-                            color: lastResult() === NodeStatus.Success ? "#00ff00" :
-                                lastResult() === NodeStatus.Failure ? "red" : "#ffaa00",
+                            color: lastResult() === BTNodeStatus.Success ? "#00ff00" :
+                                lastResult() === BTNodeStatus.Failure ? "red" : "#ffaa00",
                             "margin-left": "10px"
                         }}>
                             {lastResult()}

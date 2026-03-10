@@ -1,7 +1,7 @@
-import { Node, NodeStatus } from "./types";
-import { Blackboard } from "./blackboard";
+import { BTNode, BTNodeStatus } from "./types";
+import { Blackboard } from "../common/blackboard";
 
-export class WaitNode extends Node {
+export class WaitNode extends BTNode {
     private startTime: number | null = null;
     private durationMs: number;
 
@@ -10,7 +10,7 @@ export class WaitNode extends Node {
         this.durationMs = durationMs;
     }
 
-    tick(_blackboard: Blackboard): NodeStatus {
+    tick(_blackboard: Blackboard): BTNodeStatus {
         if (this.startTime === null) {
             this.startTime = Date.now();
         }
@@ -19,10 +19,10 @@ export class WaitNode extends Node {
 
         if (elapsed >= this.durationMs) {
             this.reset(); // Use reset to clear startTime
-            return NodeStatus.Success;
+            return BTNodeStatus.Success;
         }
 
-        return NodeStatus.Running;
+        return BTNodeStatus.Running;
     }
 
     override reset(): void {
@@ -33,17 +33,17 @@ export class WaitNode extends Node {
 /**
  * Inverter: Flips SUCCESS to FAILURE and vice-versa.
  */
-export class Inverter extends Node {
-    private child: Node;
-    constructor(child: Node) {
+export class Inverter extends BTNode {
+    private child: BTNode;
+    constructor(child: BTNode) {
         super();
         this.child = child;
     }
 
-    tick(blackboard: Blackboard): NodeStatus {
+    tick(blackboard: Blackboard): BTNodeStatus {
         const status = this.child.tick(blackboard);
-        if (status === NodeStatus.Success) return NodeStatus.Failure;
-        if (status === NodeStatus.Failure) return NodeStatus.Success;
+        if (status === BTNodeStatus.Success) return BTNodeStatus.Failure;
+        if (status === BTNodeStatus.Failure) return BTNodeStatus.Success;
         return status;
     }
 
@@ -55,17 +55,17 @@ export class Inverter extends Node {
 /**
  * Succeeder: Always returns SUCCESS (if not RUNNING).
  */
-export class Succeeder extends Node {
-    private child: Node;
-    constructor(child: Node) {
+export class Succeeder extends BTNode {
+    private child: BTNode;
+    constructor(child: BTNode) {
         super();
         this.child = child;
     }
 
-    tick(blackboard: Blackboard): NodeStatus {
+    tick(blackboard: Blackboard): BTNodeStatus {
         const status = this.child.tick(blackboard);
-        if (status === NodeStatus.Running) return NodeStatus.Running;
-        return NodeStatus.Success;
+        if (status === BTNodeStatus.Running) return BTNodeStatus.Running;
+        return BTNodeStatus.Success;
     }
 
     override reset(): void {
@@ -76,19 +76,19 @@ export class Succeeder extends Node {
 /**
  * Repeater: Restarts the child as soon as it returns a result.
  */
-export class Repeater extends Node {
-    private child: Node;
-    constructor(child: Node) {
+export class Repeater extends BTNode {
+    private child: BTNode;
+    constructor(child: BTNode) {
         super();
         this.child = child;
     }
 
-    tick(blackboard: Blackboard): NodeStatus {
+    tick(blackboard: Blackboard): BTNodeStatus {
         const status = this.child.tick(blackboard);
-        if (status !== NodeStatus.Running) {
+        if (status !== BTNodeStatus.Running) {
             this.child.reset();
         }
-        return NodeStatus.Running;
+        return BTNodeStatus.Running;
     }
 
     override reset(): void {

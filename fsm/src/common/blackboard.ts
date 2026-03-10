@@ -16,4 +16,12 @@ export class Blackboard {
     remove(key: string): void {
         this.data.delete(key);
     }
+
+    // The Utility AI sets this
+    public setGoal(goalName: string) {
+        this.data.set("currentGoal", goalName);
+    }
+    public getGoal(): string {
+        return this.data.get("currentGoal") || "IDLE";
+    }
 }

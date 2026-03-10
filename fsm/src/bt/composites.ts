@@ -1,5 +1,5 @@
-import { Node, NodeStatus } from "./types";
-import { Blackboard } from "./blackboard";
+import { BTNode, BTNodeStatus } from "./types";
+import { Blackboard } from "../common/blackboard";
 
 /**
  * Sequence (The AND Node):
@@ -9,26 +9,26 @@ import { Blackboard } from "./blackboard";
  * - If a child returns RUNNING, the Sequence returns RUNNING and stays on that child.
  * - If all children return SUCCESS, the Sequence returns SUCCESS.
  */
-export class Sequence extends Node {
-    private children: Node[];
+export class Sequence extends BTNode {
+    private children: BTNode[];
 
-    constructor(children: Node[]) {
+    constructor(children: BTNode[]) {
         super();
         this.children = children;
     }
 
-    tick(blackboard: Blackboard): NodeStatus {
+    tick(blackboard: Blackboard): BTNodeStatus {
         for (const child of this.children) {
             const status = child.tick(blackboard);
 
-            if (status === NodeStatus.Running) return NodeStatus.Running;
-            if (status === NodeStatus.Failure) {
+            if (status === BTNodeStatus.Running) return BTNodeStatus.Running;
+            if (status === BTNodeStatus.Failure) {
                 this.reset();
-                return NodeStatus.Failure;
+                return BTNodeStatus.Failure;
             }
         }
         this.reset();
-        return NodeStatus.Success;
+        return BTNodeStatus.Success;
     }
 
     override reset(): void {
@@ -42,31 +42,31 @@ export class Sequence extends Node {
  * MemSequence (Sequence with Memory):
  * Resumes from the last RUNNING child in the next tick.
  */
-export class MemSequence extends Node {
-    private children: Node[];
+export class MemSequence extends BTNode {
+    private children: BTNode[];
     private lastRunningIndex: number = 0;
 
-    constructor(children: Node[]) {
+    constructor(children: BTNode[]) {
         super();
         this.children = children;
     }
 
-    tick(blackboard: Blackboard): NodeStatus {
+    tick(blackboard: Blackboard): BTNodeStatus {
         for (let i = this.lastRunningIndex; i < this.children.length; i++) {
             const status = this.children[i].tick(blackboard);
 
-            if (status === NodeStatus.Running) {
+            if (status === BTNodeStatus.Running) {
                 this.lastRunningIndex = i;
-                return NodeStatus.Running;
+                return BTNodeStatus.Running;
             }
 
-            if (status === NodeStatus.Failure) {
+            if (status === BTNodeStatus.Failure) {
                 this.reset();
-                return NodeStatus.Failure;
+                return BTNodeStatus.Failure;
             }
         }
         this.reset();
-        return NodeStatus.Success;
+        return BTNodeStatus.Success;
     }
 
     override reset(): void {
@@ -81,26 +81,26 @@ export class MemSequence extends Node {
  * Selector (The OR Node / Priority Node):
  * Stateless: Always re-evaluates children from the start.
  */
-export class Selector extends Node {
-    private children: Node[];
+export class Selector extends BTNode {
+    private children: BTNode[];
 
-    constructor(children: Node[]) {
+    constructor(children: BTNode[]) {
         super();
         this.children = children;
     }
 
-    tick(blackboard: Blackboard): NodeStatus {
+    tick(blackboard: Blackboard): BTNodeStatus {
         for (const child of this.children) {
             const status = child.tick(blackboard);
 
-            if (status === NodeStatus.Success) {
+            if (status === BTNodeStatus.Success) {
                 this.reset();
-                return NodeStatus.Success;
+                return BTNodeStatus.Success;
             }
-            if (status === NodeStatus.Running) return NodeStatus.Running;
+            if (status === BTNodeStatus.Running) return BTNodeStatus.Running;
         }
         this.reset();
-        return NodeStatus.Failure;
+        return BTNodeStatus.Failure;
     }
 
     override reset(): void {
@@ -114,30 +114,30 @@ export class Selector extends Node {
  * MemSelector (Selector with Memory):
  * Resumes from the last RUNNING child in the next tick.
  */
-export class MemSelector extends Node {
-    private children: Node[];
+export class MemSelector extends BTNode {
+    private children: BTNode[];
     private lastRunningIndex: number = 0;
 
-    constructor(children: Node[]) {
+    constructor(children: BTNode[]) {
         super();
         this.children = children;
     }
 
-    tick(blackboard: Blackboard): NodeStatus {
+    tick(blackboard: Blackboard): BTNodeStatus {
         for (let i = this.lastRunningIndex; i < this.children.length; i++) {
             const status = this.children[i].tick(blackboard);
 
-            if (status === NodeStatus.Success) {
+            if (status === BTNodeStatus.Success) {
                 this.reset();
-                return NodeStatus.Success;
+                return BTNodeStatus.Success;
             }
-            if (status === NodeStatus.Running) {
+            if (status === BTNodeStatus.Running) {
                 this.lastRunningIndex = i;
-                return NodeStatus.Running;
+                return BTNodeStatus.Running;
             }
         }
         this.reset();
-        return NodeStatus.Failure;
+        return BTNodeStatus.Failure;
     }
 
     override reset(): void {

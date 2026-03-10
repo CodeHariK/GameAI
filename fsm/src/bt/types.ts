@@ -1,16 +1,16 @@
-import { Blackboard } from "./blackboard";
+import { Blackboard } from "../common/blackboard";
 
-export const NodeStatus = {
+export const BTNodeStatus = {
     Success: "SUCCESS",
     Failure: "FAILURE",
     Running: "RUNNING"
 } as const;
 
-export type NodeStatus = typeof NodeStatus[keyof typeof NodeStatus];
+export type BTNodeStatus = typeof BTNodeStatus[keyof typeof BTNodeStatus];
 
-export abstract class Node {
+export abstract class BTNode {
     // The "Tick" is the heartbeat of the tree
-    abstract tick(blackboard: Blackboard): NodeStatus;
+    abstract tick(blackboard: Blackboard): BTNodeStatus;
 
     /**
      * Resets the node's internal state. 
@@ -21,15 +21,15 @@ export abstract class Node {
     }
 }
 
-export class ActionNode extends Node {
-    private action: (blackboard: Blackboard) => NodeStatus;
+export class BTActionNode extends BTNode {
+    private action: (blackboard: Blackboard) => BTNodeStatus;
 
-    constructor(action: (blackboard: Blackboard) => NodeStatus) {
+    constructor(action: (blackboard: Blackboard) => BTNodeStatus) {
         super();
         this.action = action;
     }
 
-    tick(blackboard: Blackboard): NodeStatus {
+    tick(blackboard: Blackboard): BTNodeStatus {
         return this.action(blackboard);
     }
 }
@@ -38,7 +38,7 @@ export class ActionNode extends Node {
  * ConditionNode: A simple wrapper for blackboard-based boolean checks.
  * Returns SUCCESS if the predicate is true, FAILURE otherwise.
  */
-export class ConditionNode extends Node {
+export class BTConditionNode extends BTNode {
     private predicate: (bb: Blackboard) => boolean;
 
     constructor(predicate: (bb: Blackboard) => boolean) {
@@ -46,7 +46,7 @@ export class ConditionNode extends Node {
         this.predicate = predicate;
     }
 
-    tick(bb: Blackboard): NodeStatus {
-        return this.predicate(bb) ? NodeStatus.Success : NodeStatus.Failure;
+    tick(bb: Blackboard): BTNodeStatus {
+        return this.predicate(bb) ? BTNodeStatus.Success : BTNodeStatus.Failure;
     }
 }

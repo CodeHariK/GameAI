@@ -1,7 +1,7 @@
 import { createSignal, onCleanup, For } from "solid-js";
-import { NodeStatus, ActionNode, ConditionNode } from "../../bt/types";
+import { BTNodeStatus, BTActionNode, BTConditionNode } from "../../bt/types";
 import { Sequence, Selector, MemSequence } from "../../bt/composites";
-import { Blackboard } from "../../bt/blackboard";
+import { Blackboard } from "../../common/blackboard";
 import { WaitNode, Repeater } from "../../bt/decorators";
 
 export default function ResourceGatherer() {
@@ -16,30 +16,30 @@ export default function ResourceGatherer() {
     };
 
     // Actions
-    const findTree = new ActionNode(() => {
+    const findTree = new BTActionNode(() => {
         addLog("Finding tree...");
-        return NodeStatus.Success;
+        return BTNodeStatus.Success;
     });
 
-    const chopTree = new ActionNode((bb) => {
+    const chopTree = new BTActionNode((bb) => {
         addLog("Chop!");
         const currentWood = bb.get<number>("wood") || 0;
         bb.set("wood", currentWood + 1);
         setWood(currentWood + 1);
-        return NodeStatus.Success;
+        return BTNodeStatus.Success;
     });
 
-    const depositWood = new ActionNode((bb) => {
+    const depositWood = new BTActionNode((bb) => {
         const carry = bb.get<number>("wood") || 0;
         addLog(`Depositing ${carry} wood.`);
         setStoredWood(s => s + carry);
         bb.set("wood", 0);
         setWood(0);
-        return NodeStatus.Success;
+        return BTNodeStatus.Success;
     });
 
     // Conditions
-    const isFull = new ConditionNode((bb) => (bb.get<number>("wood") || 0) >= 3);
+    const isFull = new BTConditionNode((bb) => (bb.get<number>("wood") || 0) >= 3);
 
     // Tree Structure
     const gatherSequence = new MemSequence([
@@ -54,7 +54,7 @@ export default function ResourceGatherer() {
 
     const depositSequence = new Sequence([
         isFull,
-        new ActionNode(() => { addLog("Inventory full! Heading home..."); return NodeStatus.Success; }),
+        new BTActionNode(() => { addLog("Inventory full! Heading home..."); return BTNodeStatus.Success; }),
         new WaitNode(1500),
         depositWood
     ]);
