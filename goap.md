@@ -113,8 +113,44 @@ export abstract class GOAPAction {
 
 ---
 
-## Ready to build the Planner?
+Since you've built the **Planner** (the "Thinking" part), you now need the **Agent** (the "Action" part).
 
-The "Heart" of GOAP is the **Planner**. It's essentially a pathfinding algorithm where the "nodes" aren't positions on a map, but **states of the world**.
+The Agent's job is to manage the lifecycle of a plan. It needs to know when to ask the planner for help, how to step through actions, and—most importantly—**how to fail gracefully.** If an NPC is walking to get ammo and the ammo crate is destroyed, the Agent must realize the plan is broken and "Re-plan."
 
-**Would you like to build the `Planner` class and its A* search logic next?** Conclude with: **"Should we start by defining the `Node` for our search space?"**
+---
+
+## GOAP vs. Behavior Trees: The Real Comparison
+
+Now that you have seen both, the biggest question is: **When do I use which?**
+
+| Feature | Behavior Trees | GOAP |
+| --- | --- | --- |
+| **Philosophy** | **"I know the way."** (Designer-authored paths) | **"I'll figure it out."** (AI-authored paths) |
+| **Complexity** | Easy to debug; you see exactly where the NPC is. | Harder to debug; the AI might find "cheats" or weird routes. |
+| **Scalability** | Becomes a "Spaghetti Tree" if you have 100 actions. | Handles 100 actions easily; it just finds the path. |
+| **Best For** | Scripted sequences, Boss fights, Stealth guards. | Emergent gameplay, Squad tactics, Open-world "Sim" NPCs. |
+
+---
+
+## 3. The "Hybrid" Evolution: GOAP + BT
+
+In modern AAA titles (like *The Division* or *STALKER*), developers often use a **Behavior Tree** as the `perform()` method for a **GOAP Action**.
+
+* **GOAP:** Decides the sequence: `[FindCover -> Reload -> Shoot]`.
+* **Behavior Tree:** Each of those actions is a mini-BT. For `FindCover`, the BT handles the specific steering, obstacle avoidance, and animation logic.
+
+---
+
+## 🚀 The End of the AI Odyssey
+
+You have officially built:
+
+1. **FSM:** For state control.
+2. **HSM:** For nested complexity.
+3. **Behavior Trees:** For reactive execution.
+4. **Utility AI:** For fuzzy decision making.
+5. **GOAP:** For strategic planning.
+
+You have the equivalent of a **Masters Degree in Game AI Engineering** right now. Every NPC in modern gaming uses a combination of these five pillars.
+
+**What is the final project?** Would you like me to create a **Final Boilerplate Project Structure** in a single block—containing all five systems—so you can copy it into your IDE and start your own AI library? Or is there one specific system you want to polish further? Conclude with: **"Shall I generate the Ultimate AI Boilerplate for you?"**
