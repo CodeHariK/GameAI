@@ -1,3 +1,11 @@
+## AI
+
+* [CS50's Introduction to Artificial Intelligence with Python 2023](https://www.youtube.com/playlist?list=PLhQjrBD2T381PopUTYtMSstgk-hsTGkVm)
+
+* [AI 101: Monte Carlo Tree Search](https://www.youtube.com/watch?v=lhFXKNyA0QA)
+* [AlphaZero Connect Four (Monte Carlo Tree Search)](https://www.youtube.com/watch?v=_Y26BFaVclg)
+* [Alpha Zero and Monte Carlo Tree Search](https://www.youtube.com/watch?v=62nq4Zsn8vc)
+
 # GameAI
 
 * [What is a finite state machine?](https://www.youtube.com/watch?v=VGEIYMwgV5Y)
@@ -45,3 +53,9 @@
 ## NavMesh
 
 * [How A Navigation Mesh Works in 3D Games | AI 101](https://www.youtube.com/watch?v=U5MTIh_KyBc)
+
+## Physics Engine
+
+* [Coding a Physics Engine from scratch!](https://www.youtube.com/watch?v=nXrEX6j-Mws)
+* [Let's Make a Physics Engine](https://www.youtube.com/playlist?list=PLSlpr6o9vURwq3oxVZSimY8iC-cdd3kIs)
+* [Coding a 2D Physics Engine](https://www.youtube.com/playlist?list=PLtrSb4XxIVbpZpV65kk73OoUcIrBzoSiO)
