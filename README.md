@@ -10,6 +10,22 @@
 * [AlphaZero Connect Four (Monte Carlo Tree Search)](https://www.youtube.com/watch?v=_Y26BFaVclg)
 * [Alpha Zero and Monte Carlo Tree Search](https://www.youtube.com/watch?v=62nq4Zsn8vc)
 
+## MCTS
+
+* [6. Search: Games, Minimax, and Alpha-Beta](https://www.youtube.com/watch?v=STjW3eH0Cik)
+
+* [Minimax: How Computers Play Games](https://www.youtube.com/watch?v=SLgZhpDsrfc)
+* [Algorithms Explained – minimax and alpha-beta pruning](https://www.youtube.com/watch?v=l-hh51ncgDI)
+* [Coding Adventure: Chess](https://www.youtube.com/watch?v=U4ogK0MIzqk)
+
+* [AlphaZero from Scratch – Machine Learning Tutorial](https://www.youtube.com/watch?v=wuSQpLinRB4)
+
+* [AI 101: Monte Carlo Tree Search](https://www.youtube.com/watch?v=lhFXKNyA0QA)
+* [MIT | Advanced 4. Monte Carlo Tree Search](https://www.youtube.com/watch?v=xmImNoDc9Z4)
+* [AlphaZero Connect Four (Monte Carlo Tree Search)](https://www.youtube.com/watch?v=_Y26BFaVclg)
+* [Alpha Zero and Monte Carlo Tree Search](https://www.youtube.com/watch?v=62nq4Zsn8vc)
+* [Using MuZero's Tree Search To Find Optimal Tic-Tac-Toe Strategy in a Spreadsheet](https://www.youtube.com/watch?v=c8SLNEpFSrs)
+
 # GameAI
 
 * [What is a finite state machine?](https://www.youtube.com/watch?v=VGEIYMwgV5Y)
